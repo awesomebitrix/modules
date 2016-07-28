@@ -41,11 +41,24 @@ class ab_iblock extends \CModule
 	public function DoInstall()
 	{
 		ModuleManager::registerModule($this->MODULE_ID);
+		\Bitrix\Main\Loader::includeModule($this->MODULE_ID);
+		$Event = \Bitrix\Main\EventManager::getInstance();
+
+		$Event->registerEventHandlerCompatible('iblock','OnAfterIBlockPropertyAdd', 'ab.iblock', '\AB\Iblock\Handlers','resetCache');
+		$Event->registerEventHandlerCompatible('iblock','OnAfterIBlockPropertyUpdate', 'ab.iblock', '\AB\Iblock\Handlers','resetCache');
+		$Event->registerEventHandlerCompatible('iblock','OnBeforeIBlockPropertyDelete', 'ab.iblock', '\AB\Iblock\Handlers','resetCacheDelete');
+
 		return true;
 	}
 
 	public function DoUninstall()
 	{
+		\Bitrix\Main\Loader::includeModule($this->MODULE_ID);
+		$Event = \Bitrix\Main\EventManager::getInstance();
+		$Event->unRegisterEventHandler('iblock','OnAfterIBlockPropertyAdd', 'ab.iblock', '\AB\Iblock\Handlers','resetCache');
+		$Event->unRegisterEventHandler('iblock','OnAfterIBlockPropertyUpdate', 'ab.iblock', '\AB\Iblock\Handlers','resetCache');
+		$Event->unRegisterEventHandler('iblock','OnBeforeIBlockPropertyDelete', 'ab.iblock', '\AB\Iblock\Handlers','resetCacheDelete');
+
 		ModuleManager::unRegisterModule($this->MODULE_ID);
 		return true;
 	}

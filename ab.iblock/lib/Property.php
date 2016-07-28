@@ -26,10 +26,11 @@ class Property
 	/** @var array */
 	protected $propCode;
 
-	private static $usePropCache = false; // TODO включить в продакшене кеш !
+	private static $usePropCache = true;
 	private static $cachePropId = 'ab_iblock_meta_props_';
 	private static $cachePropTime = 86400 * 30;
 	private static $cachePropDir = '/ab/IBlock';
+	private static $enumCacheTag = 'meta_enum_prop';
 	private $propTypes = [];
 	/** @var  Entity\Base */
 	protected $entityProp;
@@ -376,7 +377,7 @@ class Property
 
 		foreach ($arProps as $value) {
 			$propId = $value['ID'];
-			$cacheId = 'meta_enum_prop'.$propId;
+			$cacheId = self::$enumCacheTag;
 
 //			$TagCache->clearByTag($cacheId);
 
@@ -785,4 +786,33 @@ class Property
 			}
 		}
 	}
+
+	/**
+	 * @method getCachePropId - get param cachePropId
+	 * @return string
+	 */
+	public static function getCachePropId()
+	{
+		return self::$cachePropId;
+	}
+
+	/**
+	 * @method getCachePropDir - get param cachePropDir
+	 * @return string
+	 */
+	public static function getCachePropDir()
+	{
+		return self::$cachePropDir;
+	}
+
+	/**
+	 * @method getEnumCacheTag - get param enumCacheTag
+	 * @return string
+	 */
+	public static function getEnumCacheTag()
+	{
+		return self::$enumCacheTag;
+	}
+
+
 }
